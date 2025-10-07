@@ -1,0 +1,71 @@
+// {
+//   // Visit https://aka.ms/tsconfig to read more about this file
+//   "compilerOptions": {
+//     // File Layout
+//      "rootDir": "./src",
+//      "outDir": "./dist",
+     
+
+//     // Environment Settings
+//     // See also https://aka.ms/tsconfig/module
+//     // "module": "nodenext",
+//     "module": "CommonJS", 
+//     "target": "ES2020", 
+//     // "target": "esnext",
+//     //"types": [],
+//     "types": ["node"],
+
+//     // For nodejs:
+//     // "lib": ["esnext"],
+//     // "types": ["node"],
+//     // and npm install -D @types/node
+
+//     // Other Outputs
+//     "sourceMap": true,
+//     "declaration": true,
+//     "declarationMap": true,
+
+//     // Stricter Typechecking Options
+//     "noUncheckedIndexedAccess": true,
+//     "exactOptionalPropertyTypes": true,
+//     "esModuleInterop": true,
+//     // Style Options
+//     // "noImplicitReturns": true,
+//     // "noImplicitOverride": true,
+//     // "noUnusedLocals": true,
+//     // "noUnusedParameters": true,
+//     // "noFallthroughCasesInSwitch": true,
+//     // "noPropertyAccessFromIndexSignature": true,
+
+//     // Recommended Options
+//     "strict": true,
+//     "jsx": "react-jsx",
+//     "verbatimModuleSyntax": true,
+//     "isolatedModules": true,
+//     "noUncheckedSideEffectImports": true,
+//     "moduleDetection": "force",
+//     "skipLibCheck": true,
+//   }
+// }
+
+
+{
+  "compilerOptions": {
+    "target": "ES2020",                  // modern JS features
+    "module": "CommonJS",                // works best with Node + Express
+    "rootDir": "./src",                  // source folder
+    "outDir": "./dist",                  // compiled JS output
+    "strict": true,                      // strict type checking
+    "esModuleInterop": true,             // allows default imports like import express from 'express'
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true,                // skip type checking of node_modules
+    "moduleResolution": "node",          // resolves modules like Node
+    "resolveJsonModule": true,           // allows importing JSON files
+    "declaration": true,                 // generates .d.ts files
+    "sourceMap": true,                   // generates source maps
+    "types": ["node"]                    // includes Node.js types
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
+
