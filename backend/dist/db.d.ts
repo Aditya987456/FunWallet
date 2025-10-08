@@ -39,3 +39,30 @@ export declare const userModel: mongoose.Model<{
 } & {
     __v: number;
 }>>;
+export declare const accountModel: mongoose.Model<{
+    userId: mongoose.Types.ObjectId;
+    balance: number;
+}, {}, {}, {}, mongoose.Document<unknown, {}, {
+    userId: mongoose.Types.ObjectId;
+    balance: number;
+}, {}, mongoose.DefaultSchemaOptions> & {
+    userId: mongoose.Types.ObjectId;
+    balance: number;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
+    userId: mongoose.Types.ObjectId;
+    balance: number;
+}, mongoose.Document<unknown, {}, mongoose.FlatRecord<{
+    userId: mongoose.Types.ObjectId;
+    balance: number;
+}>, {}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & mongoose.FlatRecord<{
+    userId: mongoose.Types.ObjectId;
+    balance: number;
+}> & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}>>;

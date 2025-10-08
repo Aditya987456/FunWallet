@@ -21,10 +21,24 @@ export async function ConnectDB() {
 
 
 //---------- schema for user.
-const userSchema = new Schema({
+const userSchema = new mongoose.Schema({
     firstname:{type:String ,required:true, trim:true},
     lastname:{type:String,trim:true},
     email:{type:String, required:true, trim:true, unique:true},
     password:{type:String, required:true, trim:true}
 })
 export const userModel = mongoose.model('user', userSchema);
+
+
+
+
+//----------- schema for account-----
+const accountSchema=new mongoose.Schema({
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user',
+        required:true
+    },
+    balance:{ type:Number, required:true }
+})
+export const accountModel = mongoose.model('account', accountSchema)

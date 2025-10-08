@@ -2,7 +2,7 @@
 
 import express from 'express'
 import { z } from "zod"
-import { userModel } from '../db';
+import { accountModel, userModel } from '../db';
 import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken'
 import { JWT_SECRET } from '../config';
@@ -45,7 +45,7 @@ try {
     }
 
     const { firstname, lastname, email, password }=req.body;
-
+//console.log(firstname, lastname, email, password)
     //#2:now check is user is uniques or not using email.
     const uniqueUser=await userModel.findOne({email})
     if(uniqueUser){
@@ -58,20 +58,39 @@ try {
     const hashedpassword=await bcrypt.hash(password, saltRounds )
 
     //#4: now everything is ok now so store in DB.
-    await userModel.create({
+    const newUser = await userModel.create({
         firstname,
         lastname,
         email,
         password:hashedpassword
     })
 
+
+
+    ///-----------------account created with balance from 1k - 10k.-----------------------
+    const userId=newUser._id    //new user ka id for the reference....
+    await accountModel.create({
+        userId,
+        balance:(1 + Math.random())*10000
+    })
+    ///------------------------------------------------------------------------------------
+    
+
+
+    
     res.status(200).json({
         message:"You have successsfully signed up."
     })
 
-} catch (error) {
+} catch (error:any) {
+
+    if (error.code === 11000) {
+        return res.status(409).json({ error: "Username already exists" });
+        }
+
     return res.status(500).json({
-        message:'Error in sign up...'
+        message:'Error in sign up...',
+        Error:error
     })
         
    }
