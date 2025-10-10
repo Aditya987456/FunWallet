@@ -9,6 +9,9 @@ import { BottomWarning } from './components/BottomWarning'
 
 
 import { Signup } from './components/Signup'
+import { Signin } from './components/signin'
+import { Dashboard } from './pages/Dashboard'
+
 
 function App() {
  
@@ -17,8 +20,8 @@ function App() {
      <BrowserRouter>
      <Routes>
       <Route path='/signup' element={<Signup/>}/>
-      {/* <Route path='/signin' element={<Signin/>}/>
-      <Route path='/dashboard' element={<Dashboard/>}/> */}
+      <Route path='/signin' element={<Signin/>}/>
+      <Route path='/dashboard' element={<Dashboard/>}/>
       {/* <Route path='/send' element={<SendMoney/>}/> */}
       <Route path='/w' element={<BottomWarning label='warning like any' linktext='go yaha' to={()=>{}}/>}/>
       <Route path='/h' element={<Heading label={'hellosaar'}/>}/>

@@ -48,15 +48,17 @@ import { LandingpageSide } from "./LandingpageSide";
 
 export function Signup() {
   return (
-    <div className="h-screen flex">
+    <div className="min-h-screen flex flex-col md:flex-row">
+        {/* left part fixed half page. */}
       <LandingpageSide />
-      <div className="w-1/2 border-l-2 flex justify-center items-center">
-        <div className="rounded-lg bg-white border text-center p-6">
+
+      <div className="w-full md:w-1/2 border-t md:border-t-0 md:border-l flex justify-center items-center py-8">
+        <div className="rounded-lg bg-white border max-w-md w-full text-center p-6 mx-4">
           <Heading label={"Sign up"} />
           <SubHeading label={"Enter your information to create an account"} />
-          <InputBox placeholder="John" label={"First Name"} />
-          <InputBox placeholder="Doe" label={"Last Name"} />
-          <InputBox placeholder="harkirat@gmail.com" label={"Email"} />
+          <InputBox placeholder="Aditya" label={"First Name"} />
+          <InputBox placeholder="raj" label={"Last Name"} />
+          <InputBox placeholder="adityarajxdev@gmail.com" label={"Email"} />
           <InputBox placeholder="123456" label={"Password"} />
           <div className="pt-4">
             <ButtonComponent label={"Sign up"} onClick={() => {}} />
