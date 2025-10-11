@@ -8,7 +8,7 @@ import mongoose from 'mongoose'
 
 export const accountRoute=express.Router()
 
-
+//api/v1/account/
 accountRoute.get('/', (req,res)=>{
     res.json({
         message:'hello from ---> /api/v1/account/'
@@ -109,5 +109,40 @@ session.startTransaction();    //here transaction started
         })
     }finally{
         session.endSession()
+    }
+})
+
+
+
+accountRoute.post('/add', UserMiddleware, async (req, res)=>{
+    try {
+        const { amount }=req.body
+
+        if(amount>3000){
+            res.status(400).json({ error: "Amount exceeds limit of 3000" });
+        }
+
+        const SearchUser = await accountModel.findOne({
+            //@ts-ignore
+            userId:req.userId
+        })
+
+        if (!SearchUser) return res.status(404).json({ message: 'Account not found' });
+
+        SearchUser.balance += Number(amount);   //Number to convert in number type.
+
+       // NOW the balance in DB is updated--> we have to do this ...
+         await SearchUser.save(); 
+
+        res.status(200).json({ 
+            message: 'Balance updated',
+            balance: SearchUser.balance
+         });
+
+         
+    } catch (error) {
+        res.status(403).json({
+            message:'Error in updating balance'
+        })
     }
 })

@@ -88,21 +88,22 @@ exports.userRoute.post('/signin', async (req, res) => {
         const userExist = await db_1.userModel.findOne({ email });
         if (!userExist) {
             return res.status(403).json({
-                message: 'Invalid emaild. Try again'
+                message: 'Invalid emailId.'
             });
         }
         //#3:if user exist now compare password.
         const passwordValid = await bcrypt_1.default.compare(password, userExist.password);
         if (!passwordValid) {
             return res.status(403).json({
-                message: 'Invalid password. Try again'
+                message: 'Incorrect password. Try again'
             });
         }
         //#4: after all ok then jwt signin for the token.
         const token = jsonwebtoken_1.default.sign({ id: userExist._id }, config_1.JWT_SECRET);
         res.status(200).json({
             message: 'Signin Successfully...',
-            token: token
+            token: token,
+            firstname: userExist.firstname
         });
     }
     catch (error) {

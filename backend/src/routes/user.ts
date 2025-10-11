@@ -117,7 +117,7 @@ try {
     const userExist=await userModel.findOne({email})
     if(!userExist){
         return res.status(403).json({
-            message:'Invalid emaild. Try again'
+            message:'Invalid emailId.'
         })
     }
 
@@ -125,7 +125,7 @@ try {
     const passwordValid = await bcrypt.compare(password, userExist.password)
     if(!passwordValid){
         return res.status(403).json({
-            message:'Invalid password. Try again'
+            message:'Incorrect password. Try again'
         })
     }
 
@@ -135,7 +135,8 @@ try {
 
     res.status(200).json({
         message:'Signin Successfully...',
-        token:token
+        token:token,
+        firstname:userExist.firstname
     })
 
 

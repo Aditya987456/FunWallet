@@ -9,6 +9,7 @@ const middleware_1 = require("../middleware/middleware");
 const db_1 = require("../db");
 const mongoose_1 = __importDefault(require("mongoose"));
 exports.accountRoute = express_1.default.Router();
+//api/v1/account/
 exports.accountRoute.get('/', (req, res) => {
     res.json({
         message: 'hello from ---> /api/v1/account/'
@@ -20,10 +21,12 @@ exports.accountRoute.get('/balance', middleware_1.UserMiddleware, async (req, re
         const account = await db_1.accountModel.findOne({
             //@ts-ignore
             userId: req.userId
-        });
+        }).populate('userId', 'email');
         res.status(200).json({
             message: 'Your a/c balanace is : ',
-            balance: account?.balance
+            balance: account?.balance,
+            //@ts-ignore
+            email: account?.userId?.email
         });
     }
     catch (error) {
@@ -79,6 +82,32 @@ exports.accountRoute.post('/transfer', middleware_1.UserMiddleware, async (req, 
     }
     finally {
         session.endSession();
+    }
+});
+exports.accountRoute.post('/add', middleware_1.UserMiddleware, async (req, res) => {
+    try {
+        const { amount } = req.body;
+        if (amount > 3000) {
+            res.status(400).json({ error: "Amount exceeds limit of 3000" });
+        }
+        const SearchUser = await db_1.accountModel.findOne({
+            //@ts-ignore
+            userId: req.userId
+        });
+        if (!SearchUser)
+            return res.status(404).json({ message: 'Account not found' });
+        SearchUser.balance += Number(amount); //Number to convert in number type.
+        // NOW the balance in DB is updated--> we have to do this ...
+        await SearchUser.save();
+        res.status(200).json({
+            message: 'Balance updated',
+            balance: SearchUser.balance
+        });
+    }
+    catch (error) {
+        res.status(403).json({
+            message: 'Error in updating balance'
+        });
     }
 });
 //# sourceMappingURL=account.js.map
