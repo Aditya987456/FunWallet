@@ -20,6 +20,11 @@ ConnectDB();
 
 
 
-app.listen(port, ()=>{
-    console.log('Server running on the port :'+port)
-})
+// app.listen(port,  ()=>{
+//     console.log('Server running on the port :'+port)
+// })
+
+//this is for also run on the other device.
+app.listen(3000, "0.0.0.0", () => {
+  console.log("✅ Backend running on http://192.168.165.33:3000");
+});

@@ -68,18 +68,19 @@ session.startTransaction();    //here transaction started
         //@ts-ignore
         {userId:req.userId}).session(session)   //$$$$## here .session(session) means this is the part of transaction running in this session.
 
-    if(!SenderAccount){
-        throw new Error('Sender not found')
+    if (!SenderAccount) {
+    return res.status(404).json({ message: "Sender not found" });
     }
-    if(SenderAccount.balance < amount){
-        throw new Error('Insufficient balance')
+    if (SenderAccount.balance < amount) {
+    return res.status(403).json({ message: "Insufficient balance" });
     }
 
 
     const ReceiverAccount = await accountModel.findOne({userId:receiverId}).session(session)
 
     if(!ReceiverAccount){
-        throw new Error('Receiver not found || invalid receiver.')
+       // throw new Error('Receiver not found || invalid receiver.')
+       return res.status(404).json({ message: "Receiver not found"})
     }
 
 

@@ -8,7 +8,7 @@ import { Request, Response, NextFunction } from 'express'
 export const UserMiddleware = (req:Request, res:Response, next:NextFunction)=>{
 
     const header=req.headers.authorization
-    console.log("header-----------------"+header)
+    //console.log("header-----------------"+header)
     //if(!header || !header.startsWith('Bearer')){
     if(!header){
         return res.status(403).json({

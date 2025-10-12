@@ -3,13 +3,25 @@ import { BACKEND_URL } from "../pages/config"
 import axios from "axios"
 import { useNavigate } from "react-router-dom"
 import { ButtonComponent } from "./ButtonComponent"
+import { SendMoneyModal } from "./SendMoneyModal"
 
+
+interface User {
+  _id: string;
+  firstname: string;
+  lastname: string;
+  email: string;
+}
 
 
 export const Users = ()=>{
+    //ye dono props ko send karna hai in sendMoneyModal.
+    const [showSendMoneyModal, setShowSendMoneyModal] = useState(false);
+    const [selectedUser, setSelectedUser] = useState({ id: "", name: "" });
 
-    const [users, setUsers]=useState([])
+    const [users, setUsers]=useState<User[]>([])
     const [filter, setFilter]=useState('')
+
 
     useEffect( ()=>{
         const token=localStorage.getItem('token');
@@ -34,11 +46,29 @@ export const Users = ()=>{
             }} type="text" placeholder="Search users..." className="w-full px-2 py-2 border rounded border-slate-200"></input>
         </div>
 
-        <div className="max-h-lvh flex-1 overflow-y-auto pr-2">
-            {users.map(Each =>(<UserDisplay user={Each} />))}
+        <div className="max-h-lvh flex-1 overflow-y-auto pr-1 md:pr-2">
+            {users.map(Each =>(<UserDisplay 
+            key={Each._id}
+            user={Each}
+//######NOTE-- like on sending the props - setselecteduser-means send money to this user + and
+//  each user can start show modal.  here oneSend - is a function jo sabhi user ke pass hai aur trugger hoga 
+//  jab individual user pe send money button click karenge aur sath me showmodal bhi open hoga.
+            onSend={() => {
+            setSelectedUser({ id: Each._id, name: Each.firstname });
+            setShowSendMoneyModal(true);
+            }}
+            
+            />))}
         </div>
+
+            <SendMoneyModal
+            show={showSendMoneyModal}
+            onClose={() => setShowSendMoneyModal(false)}
+            receiver={selectedUser} />
     </>
 }
+
+
 
 
 
@@ -52,10 +82,11 @@ export const Users = ()=>{
 //     _id:any
 // }
 
-function UserDisplay({user}:any){
-    const navigate=useNavigate()
+function UserDisplay({user, onSend}:any){
+   // const navigate=useNavigate()
+    
 
-    return <div className="flex justify-between my-4 rounded-lg px-1 hover:bg-slate-100 ">
+    return <div className="flex justify-between my-4 rounded-lg md:px-1 hover:bg-slate-100 ">
         <div className="flex">
 
             {/* circle logo- */}
@@ -74,10 +105,18 @@ function UserDisplay({user}:any){
 
         </div>
 
+{/* ######## its like sending money tp --->  /send?id=123&name=Aditya  to receiverid=123 and name=aditya */}
         <div className="flex flex-col justify-center h-full">
-            <ButtonComponent onClick={() => {
+           
+            {/* <ButtonComponent onClick={() => {
                 navigate("/send?id=" + user._id + "&name=" + user.firstname)
-            }} label={"Send Money"} />
+            }} label={"Send Money"} /> */}
+            
+        {/* -------- not navigate, this is good for the modal type things. */}
+{/*####### NOTE_ onClick={onSend} means when the button is clicked, call the 
+        onSend function passed from the parent (Users component). */}
+             <ButtonComponent onClick={onSend} label={"Send Money"} />
+
         </div>
 
     </div>

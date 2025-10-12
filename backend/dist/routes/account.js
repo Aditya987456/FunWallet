@@ -50,14 +50,15 @@ exports.accountRoute.post('/transfer', middleware_1.UserMiddleware, async (req, 
         //@ts-ignore
         { userId: req.userId }).session(session); //$$$$## here .session(session) means this is the part of transaction running in this session.
         if (!SenderAccount) {
-            throw new Error('Sender not found');
+            return res.status(404).json({ message: "Sender not found" });
         }
         if (SenderAccount.balance < amount) {
-            throw new Error('Insufficient balance');
+            return res.status(403).json({ message: "Insufficient balance" });
         }
         const ReceiverAccount = await db_1.accountModel.findOne({ userId: receiverId }).session(session);
         if (!ReceiverAccount) {
-            throw new Error('Receiver not found || invalid receiver.');
+            // throw new Error('Receiver not found || invalid receiver.')
+            return res.status(404).json({ message: "Receiver not found" });
         }
         //after passing all checks like - sender+receiver is there , sufficient balance is there noe do transaction...
         //performing transaction.

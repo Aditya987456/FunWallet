@@ -49,3 +49,44 @@ When a transaction starts and reads a document (like your account), MongoDB lock
 ----
 
 > Summary - A race condition is when code runs too fast and overlaps — MongoDB avoids this by locking each document during a transaction so only one change happens at a time.
+
+<br>
+<br>
+<br>
+
+
+----
+
+## very important -> react custome hook doubt solved...
+
+> if we have custom hook - 
+ ```export function useWallet() {
+  const [balance, setBalance] = useState(0)
+  ...
+  const sendMoney = async (...) => { ... }
+  const addMoney = async (...) => { ... }
+
+  return { balance, sendMoney, addMoney, ... }
+}
+```
+> Then if we do this in two different components:
+
+```
+// In BalanceShow component
+const wallet = useWallet()
+
+// In SendMoneyModal component
+const { sendMoney } = useWallet()
+
+```
+
+### What actually happens
+
+> Each time you call a hook like useWallet() React creates a completely new isolated instance of that hook’s state.
+
+### i.e 
+> Both have their own states and methods
+
+> But they don’t share the same balance state
+
+> So when you call sendMoney() inside SendMoneyModal, it updates its own copy of balance — not the one shown in BalanceShow
