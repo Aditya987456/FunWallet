@@ -71,16 +71,19 @@ export declare const TransactionHistoryModel: mongoose.Model<{
     amount: number;
     PaymentType: "add" | "receive" | "send";
     timestamp: NativeDate;
+    peopleName?: string | null | undefined;
 }, {}, {}, {}, mongoose.Document<unknown, {}, {
     userId: mongoose.Types.ObjectId;
     amount: number;
     PaymentType: "add" | "receive" | "send";
     timestamp: NativeDate;
+    peopleName?: string | null | undefined;
 }, {}, mongoose.DefaultSchemaOptions> & {
     userId: mongoose.Types.ObjectId;
     amount: number;
     PaymentType: "add" | "receive" | "send";
     timestamp: NativeDate;
+    peopleName?: string | null | undefined;
 } & {
     _id: mongoose.Types.ObjectId;
 } & {
@@ -90,16 +93,19 @@ export declare const TransactionHistoryModel: mongoose.Model<{
     amount: number;
     PaymentType: "add" | "receive" | "send";
     timestamp: NativeDate;
+    peopleName?: string | null | undefined;
 }, mongoose.Document<unknown, {}, mongoose.FlatRecord<{
     userId: mongoose.Types.ObjectId;
     amount: number;
     PaymentType: "add" | "receive" | "send";
     timestamp: NativeDate;
+    peopleName?: string | null | undefined;
 }>, {}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & mongoose.FlatRecord<{
     userId: mongoose.Types.ObjectId;
     amount: number;
     PaymentType: "add" | "receive" | "send";
     timestamp: NativeDate;
+    peopleName?: string | null | undefined;
 }> & {
     _id: mongoose.Types.ObjectId;
 } & {

@@ -53,14 +53,18 @@ exports.accountRoute.post('/transfer', middleware_1.UserMiddleware, async (req, 
         }
         const SenderAccount = await db_1.accountModel.findOne(
         //@ts-ignore
-        { userId: req.userId }).session(session); //$$$$## here .session(session) means this is the part of transaction running in this session.
+        { userId: req.userId })
+            .populate('userId', 'firstname')
+            .session(session); //$$$$## here .session(session) means this is the part of transaction running in this session.
         if (!SenderAccount) {
             return res.status(404).json({ message: "Sender not found" });
         }
         if (SenderAccount.balance < amount) {
             return res.status(403).json({ message: "Insufficient balance" });
         }
-        const ReceiverAccount = await db_1.accountModel.findOne({ userId: receiverId }).session(session);
+        const ReceiverAccount = await db_1.accountModel.findOne({ userId: receiverId })
+            .populate('userId', 'firstname') //####$$$$extract user firstname using populate because accountmodel is ref to usermodel
+            .session(session);
         if (!ReceiverAccount) {
             // throw new Error('Receiver not found || invalid receiver.')
             return res.status(404).json({ message: "Receiver not found" });
@@ -75,6 +79,7 @@ exports.accountRoute.post('/transfer', middleware_1.UserMiddleware, async (req, 
                 userId: SenderAccount.userId,
                 amount,
                 PaymentType: "send",
+                peopleName: ReceiverAccount.userId.firstname
             }], { session });
         await db_1.accountModel.updateOne(//credit money.
         { userId: receiverId }, {
@@ -85,6 +90,7 @@ exports.accountRoute.post('/transfer', middleware_1.UserMiddleware, async (req, 
                 userId: ReceiverAccount.userId,
                 amount,
                 PaymentType: "receive",
+                peopleName: SenderAccount.userId.firstname //### here senderAccount bec in UI will show received from xyz
             }], { session });
         await session.commitTransaction(); //commit the transaction.
         //------------------------------------------------------------------------------------------
@@ -124,6 +130,7 @@ exports.accountRoute.post('/add', middleware_1.UserMiddleware, async (req, res) 
             userId: SearchUser.userId,
             amount,
             PaymentType: "add",
+            peopleName: 'own'
         });
         res.status(200).json({
             message: 'Balance updated',

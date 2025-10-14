@@ -58,6 +58,7 @@ const TransactionHistory = new mongoose.Schema({
     },
     amount:{type:Number, required:true},
     PaymentType:{type:String, enum: ["add", "receive", "send"], required:true },
+    peopleName: { type: String, trim: true }, 
     timestamp: { type: Date, default: Date.now }
 })
 export const TransactionHistoryModel = mongoose.model('transaction', TransactionHistory)

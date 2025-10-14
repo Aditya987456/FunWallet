@@ -12,7 +12,7 @@ interface SendMoneyModalProps {
 
 export const SendMoneyModal = ({ show, onClose, receiver }: SendMoneyModalProps) => {
  //ye isi component ke liye define hai bas.
-  const [amount, setAmount] = useState<number>(0)
+  const [amount, setAmount] = useState("")  //currently string.
   const [loading, setLoading] = useState(false)
 
   const { sendMoney } = useWalletContext() //here we only need sendmoney function
@@ -21,19 +21,21 @@ export const SendMoneyModal = ({ show, onClose, receiver }: SendMoneyModalProps)
 
   //it handle the sendmoney like it redirect to the sendmoney function which we accessing here
   //from useWalletContext as sendMoney.
-  const handleSendMoney = async () => {
-    if (!amount || isNaN(amount) || amount <= 0) {
-  toast.error("Please enter a valid amount")
-  return
-}
 
-    
-    setLoading(true)
-    await sendMoney(receiver.id, amount)
-    setLoading(false)
-    setAmount(0)
-    onClose()
+  const handleSendMoney = async () => {
+  const numericAmount = Number(amount)   //here converting amount in NUmber from string
+
+  if (!numericAmount || isNaN(numericAmount) || numericAmount <= 0) {
+    toast.error("Please enter a valid amount")
+    return
   }
+
+  setLoading(true)
+  await sendMoney(receiver.id, numericAmount)
+  setLoading(false)
+  setAmount("") // reset input clean
+  onClose()
+}
 
   return (
     <div className="fixed inset-0 bg-black/60 flex justify-center items-center z-50">
@@ -53,15 +55,14 @@ export const SendMoneyModal = ({ show, onClose, receiver }: SendMoneyModalProps)
           <label htmlFor="amount" className="text-sm font-medium">
             Amount (in ₹)
           </label>
-          <input
+         <input
   type="number"
   value={amount}
-  // onChange={(e:any) => setAmount(e.target.value)} //
-  onChange={(e) => setAmount(Number(e.target.value))}
-
+  onChange={(e) => setAmount(e.target.value)}  // keep as string
   placeholder="Enter amount"
   className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
 />
+
         </div>
 
         {/* Buttons--> for add money and cancel  */}

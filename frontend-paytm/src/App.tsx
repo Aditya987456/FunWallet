@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { BrowserRouter, Route, Routes,Navigate } from 'react-router-dom'
 import './App.css'
 import './index.css'
 
@@ -14,6 +14,8 @@ function App() {
      <BrowserRouter>
       <WalletProvider>
         <Routes>
+          {/* user will come on / but redirect to /signin */}
+           <Route path="/" element={<Navigate to="/signin" replace />} />  
           <Route path="/signup" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
           <Route path="/dashboard" element={<Dashboard />} />

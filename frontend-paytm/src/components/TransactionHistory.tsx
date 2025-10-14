@@ -47,16 +47,39 @@ for fetching balance and transaction history.     */
 
 
 
-  const formatEntry = (tx:any) => {
-    const prefix = tx.PaymentType === "send" ? "-" : "+"
-    
-    return `${prefix}₹${tx.amount} ${tx.PaymentType}`
+const formatEntry = (tx: any) => {
+  // prefix logic (send → "-", else "+")
+  const prefix = tx.PaymentType === "send" ? "-" : "+"
+  // color logic
+  let colorClass = ""
+  let message = ''
+
+  if (tx.PaymentType === "send") {
+    colorClass = "text-red-600",
+    message=`Send to ${tx.peopleName}`
+
+  } else if (tx.PaymentType === "receive") {
+    colorClass = "text-green-600"
+    message=`Received from ${tx.peopleName}`
+
+
+  } else if (tx.PaymentType === "add") {
+    colorClass = "text-blue-600"
+     message=`Added by You`  //no need of firstname here.
   }
+
+  return (
+    <span className={`font-medium ${colorClass}`}>
+      {prefix}₹{tx.amount} {message}
+    </span>
+  )
+}
+
 
     return(
         
      <div className="rounded-xl p-4 bg-[#fefeff]">
-      <h2 className="text-xl font-semibold mb-3">Transaction History</h2>
+      <h2 className="text-xl font-semibold mb-3">Recent transactions</h2>
 
       {historyError ?
     //   ya to error hoga ya nahi hoga.

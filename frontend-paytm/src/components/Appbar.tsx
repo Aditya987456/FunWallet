@@ -1,15 +1,39 @@
 //import { ButtonComponent } from "./ButtonComponent"
 
 
+
+import { useNavigate } from "react-router-dom"
 import { WalletIcon } from "./walletIcon"
+
+
 export const Appbar=()=>{
+
+
+ const navigate = useNavigate()
+//logout from dashboard and redirect to signup page logic.
+  const Logout = ()=>{
+   
+    const confirmLogout = window.confirm("Are you sure you want to log out?")
+    if (!confirmLogout) return
+    localStorage.removeItem('token')
+    navigate('/signin')
+  }
+
+
+
+
     return <header className="mt-2 rounded-t-md w-full h-16 flex justify-between items-center bg-[#fefefe] shadow px-2 md:px-6 py-4">
-        <div className="flex items-center sm:gap-1 md:gap-2 text-2xl md:text-3xl font-bold text-blue-900">
+        <div 
+        // onClick={()=>navigate('/dashboard')}
+        className="flex items-center sm:gap-1 md:gap-2 text-2xl md:text-3xl font-bold text-blue-900">
           <span><WalletIcon /></span> FunWallet
         </div>
         <div className="flex items-center">
+          {/* will add this in V2. */}
           {/* <span className="hidden sm:block text-gray-700">Hi, Aditya</span> */}
-          <button className=" text-sm md:text-md bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition">
+          <button
+          onClick={Logout}
+           className=" text-sm md:text-md bg-blue-600 text-white px-3 py-1 rounded-lg hover:bg-blue-700 transition">
             Logout
           </button>
           {/* <ButtonComponent label={'Logout'} onClick={()=>{}}/> */}

@@ -112,48 +112,50 @@ exports.userRoute.post('/signin', async (req, res) => {
         });
     }
 });
+//-----------------------will work on this to update user account info in V2--------------
 //Route to update user information.---> other than email...
-const Updatebody = zod_1.z.object({
-    password: zod_1.z.string().optional(),
-    firstname: zod_1.z.string().optional(),
-    lastname: zod_1.z.string().optional()
-});
-exports.userRoute.put('/', middleware_1.UserMiddleware, async (req, res) => {
-    try {
-        const updateInputValid = Updatebody.safeParse(req.body);
-        if (!updateInputValid.success) {
-            res.status(411).json({
-                message: 'Error while updating information.'
-            });
-        }
-        const { firstname, lastname, password } = req.body;
-        //######: for update in mongodb --> expect in object therefore firstly create a update object then
-        const updateInputs = {}; //this is the object...
-        if (firstname) {
-            updateInputs.firstname = firstname;
-        }
-        if (lastname) {
-            updateInputs.lastname = lastname;
-        }
-        if (password) {
-            const hashedpassword = await bcrypt_1.default.hash(password, saltRounds);
-            updateInputs.password = hashedpassword;
-        }
-        //????? if no field for update then??????
-        //now call to db for update.
-        await db_1.userModel.updateOne(
-        //@ts-ignore
-        { _id: req.userId }, { $set: updateInputs });
-        res.status(200).json({
-            message: 'Updated details successfully.'
-        });
-    }
-    catch (error) {
-        return res.status(500).json({
-            message: 'Error in updating details.'
-        });
-    }
-});
+// const Updatebody = z.object({
+//     password:z.string().optional(),
+//     firstname:z.string().optional(),
+//     lastname:z.string().optional()
+// })
+// userRoute.put('/', UserMiddleware, async (req, res)=>{
+// try {
+//     const updateInputValid = Updatebody.safeParse(req.body)
+//     if(!updateInputValid.success){
+//         res.status(411).json({
+//             message:'Error while updating information.'
+//         })
+//     }
+//     const { firstname, lastname, password }=req.body
+//     //######: for update in mongodb --> expect in object therefore firstly create a update object then
+//     const updateInputs:any={};  //this is the object...
+//     if(firstname){
+//         updateInputs.firstname=firstname;
+//     }
+//     if(lastname){
+//         updateInputs.lastname=lastname;
+//     }
+//     if(password){
+//         const hashedpassword= await bcrypt.hash(password, saltRounds)
+//         updateInputs.password=hashedpassword
+//     }
+// //????? if no field for update then??????
+//     //now call to db for update.
+//     await userModel.updateOne(
+//         //@ts-ignore
+//         {_id:req.userId},
+//         {$set:updateInputs}
+//     )
+//     res.status(200).json({
+//         message:'Updated details successfully.'
+//     })
+// } catch (error) {
+//         return res.status(500).json({
+//             message:'Error in updating details.'
+//         })
+//     }
+// })
 //######### important thing to learn---
 //Route to get users from backend, via firstname or lastname.
 exports.userRoute.get('/bulk', middleware_1.UserMiddleware, async (req, res) => {
