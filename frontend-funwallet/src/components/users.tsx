@@ -110,43 +110,83 @@ export const Users = ()=>{
 //     _id:any
 // }
 
-function UserDisplay({user, onSend}:any){
-   // const navigate=useNavigate()
+
+
+
+
+// function UserDisplay({user, onSend}:any){
+//    // const navigate=useNavigate()
     
 
-    return <div className="flex justify-between my-4 rounded-lg md:px-1 hover:bg-slate-100 ">
-        <div className="flex">
+//     return <div className="flex justify-between my-4 rounded-lg md:px-1 hover:bg-slate-100 ">
+//         <div className="flex">
 
-            {/* circle logo- */}
-            <div className="rounded-full h-9 w-9 bg-slate-200 flex justify-center mt-1 mr-2">
-                <div className="flex flex-col justify-center h-full text-xl">
-                    {user.firstname[0]}
-                </div>
-            </div>
+//             {/* circle logo- */}
+//             <div className="rounded-full h-9 w-9 bg-slate-200 flex justify-center mt-1 mr-2">
+//                 <div className="flex flex-col justify-center h-full text-xl">
+//                     {user.firstname[0]}
+//                 </div>
+//             </div>
 
-            {/* name first+last. */}
-            <div className="flex flex-col justify-center h-full">
-                <div>
-                    {user.firstname} {user.lastname}
-                </div>
-            </div>
+//             {/* name first+last. */}
+//             <div className="flex flex-col justify-center h-full">
+//                 <div>
+//                     {user.firstname} {user.lastname}
+//                 </div>
+//             </div>
 
-        </div>
+//         </div>
 
-{/* ######## its like sending money tp --->  /send?id=123&name=Aditya  to receiverid=123 and name=aditya */}
-        <div className="flex flex-col justify-center h-full">
+// {/* ######## its like sending money tp --->  /send?id=123&name=Aditya  to receiverid=123 and name=aditya */}
+//         <div className="flex flex-col justify-center h-full">
            
-            {/* <ButtonComponent onClick={() => {
-                navigate("/send?id=" + user._id + "&name=" + user.firstname)
-            }} label={"Send Money"} /> */}
+//             {/* <ButtonComponent onClick={() => {
+//                 navigate("/send?id=" + user._id + "&name=" + user.firstname)
+//             }} label={"Send Money"} /> */}
             
-        {/* -------- not navigate, this is good for the modal type things. */}
-{/*####### NOTE_ onClick={onSend} means when the button is clicked, call the 
-        onSend function passed from the parent (Users component). */}
-             <ButtonComponent onClick={onSend} label={"Send Money"} />
+//         {/* -------- not navigate, this is good for the modal type things. */}
+// {/*####### NOTE_ onClick={onSend} means when the button is clicked, call the 
+//         onSend function passed from the parent (Users component). */}
+//              <ButtonComponent onClick={onSend} label={"Send Money"} />
 
+//         </div>
+
+//     </div>
+
+// }
+
+
+//enhanced like border on each user
+
+function UserDisplay({ user, onSend }: any) {
+  return (
+    <div className="flex justify-between my-4 p-3 rounded-lg md:px-1 hover:bg-slate-100 border border-gray-300">
+      <div className="flex">
+        {/* circle logo */}
+        <div className="rounded-full h-9 w-9 bg-slate-200 flex justify-center mt-1 mr-2">
+          <div className="flex flex-col justify-center h-full text-xl font-semibold text-gray-700">
+            {user.firstname[0]}
+          </div>
         </div>
 
-    </div>
+        {/* name first+last */}
+        <div className="flex flex-col justify-center h-full">
+          <div className="font-medium text-gray-800">
+            {user.firstname} {user.lastname}
+          </div>
+        </div>
+      </div>
 
+      {/* Send Money button */}
+      <div className="flex flex-col justify-center h-full">
+        <ButtonComponent onClick={onSend} label={"Send Money"} />
+      </div>
+    </div>
+  );
 }
+
+
+
+
+
+

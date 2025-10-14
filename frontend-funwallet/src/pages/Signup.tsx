@@ -24,17 +24,37 @@ export function Signup() {
   async function  SigningUp() {
     try {
 
-      if( !firstname.trim() || !lastname.trim() || !email.trim() || !password.trim() ){
-        toast.error('All fields required !')
+      // if( !firstname.trim() || !lastname.trim() || !email.trim() || !password.trim() ){
+      //   toast.error('All fields required !')
+      //   return;
+      // }
+
+      // const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
+      //   firstname,
+      //   lastname,
+      //   email,
+      //   password
+      // })
+
+
+// enhaced using help of GPT
+      const normalizedFirstname = firstname.trim();
+      const normalizedLastname = lastname.trim();
+      const normalizedEmail = email.trim().toLowerCase();  // email lowercased
+      const normalizedPassword = password.trim();          // password trimmed
+
+      if (!normalizedFirstname || !normalizedLastname || !normalizedEmail || !normalizedPassword) {
+        toast.error('All fields required !');
         return;
       }
 
       const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
-        firstname,
-        lastname,
-        email,
-        password
-      })
+        firstname: normalizedFirstname,
+        lastname: normalizedLastname,
+        email: normalizedEmail,
+        password: normalizedPassword,
+      });
+
 
       toast.success(response.data.message || 'Successfully signed up!');
       navigate('/signin');
