@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
+import { ClipLoader } from "react-spinners";
 
 
 export function Signin() {
@@ -18,10 +19,12 @@ export function Signin() {
 
   const [email, setEmail]=useState('')
   const [password, setPassword]=useState('')
+  const [ loader, setLoader ]=useState(false)   //for showing loading after during signing in.
 
 
   async function  SigningIn() {
     try {
+      setLoader(true)
 
       // if(!email.trim() || !password.trim() ){
       //   toast.error('All fields required !')
@@ -34,6 +37,7 @@ export function Signin() {
       // })
 
 //-- enhaced using help of GPT
+    
     const normalizedEmail = email.trim().toLowerCase();   //  lowercase + trim
     const normalizedPassword = password.trim();           //  trim spaces
 
@@ -86,6 +90,8 @@ export function Signin() {
        //for the network error - like fallback.
       toast.error("Server not reachable or unexpected error!");
      }
+    }finally{
+      setLoader(false)
     }
   }
 
@@ -99,7 +105,7 @@ export function Signin() {
       <LandingpageSide />   
 
       
-      <div className="    w-full md:w-1/2 border-t md:border-t-0 md:border-l flex justify-center items-center py-8">
+      <div className="  w-full md:w-1/2  md:border-t-0 md:border-l flex justify-center items-center py-8">
         <div className="  rounded-lg bg-white border max-w-md w-full text-center p-6 mx-4">
           <Heading label={"Sign in"} />
           <SubHeading label={"Enter your information to sign in to your account"} />
@@ -113,7 +119,9 @@ export function Signin() {
            placeholder="123456" label={"Password"} />
 
           <div className="pt-4">
-            <ButtonComponent label={"Sign in"} onClick={SigningIn} />
+            <ButtonComponent
+             label={loader ? <ClipLoader size={20} color="#fff" /> : "Sign in"}
+             onClick={SigningIn} />
           </div>
 
           <BottomWarning

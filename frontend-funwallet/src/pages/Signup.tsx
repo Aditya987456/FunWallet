@@ -9,6 +9,7 @@ import toast from "react-hot-toast";
 import axios from "axios";
 import { BACKEND_URL } from "./config";
 import { useNavigate } from "react-router-dom";
+import { ClipLoader } from "react-spinners";
 
 
 
@@ -19,9 +20,11 @@ export function Signup() {
   const [lastname, setLastname]=useState('')
   const [email, setEmail]=useState('')
   const [password, setPassword]=useState('')
+  const [ loader, setLoader]=useState(false)
 
 
   async function  SigningUp() {
+    setLoader(true)
     try {
 
       // if( !firstname.trim() || !lastname.trim() || !email.trim() || !password.trim() ){
@@ -85,6 +88,8 @@ export function Signup() {
       //for the network error - like fallback.
       toast.error("Server not reachable or unexpected error!");
     }
+    }finally{
+      setLoader(false)
     }
   }
 
@@ -121,7 +126,9 @@ export function Signup() {
             placeholder="123456" label={"Password"} />
 
           <div className="pt-4">
-            <ButtonComponent label={"Sign up"} onClick={SigningUp} />
+            <ButtonComponent
+             label={loader ? <ClipLoader size={20} color="#fff" /> : "Sign up"}
+             onClick={SigningUp} />
           </div>
           <BottomWarning label={"Already have an account?"} linktext={"Sign in"} to={"/signin"} />
         </div>
