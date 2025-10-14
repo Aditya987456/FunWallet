@@ -1,3 +1,64 @@
+
+# FunWallet 🎉💸  
+*A wallet for play, not pay.*  
+
+## description- 
+FunWallet is a mini wallet app built for learning and fun. It lets users:  
+- Create an account & sign in  
+- Add, send, and receive money  
+- View transaction history in real-time  
+
+##  Tech Stack  
+- **Frontend:** React + TypeScript + Vite + TailwindCSS  
+- **Backend:** Node.js + Express + MongoDB + Mongoose  
+- **Auth:** JWT  
+- **Deployment:**  
+  - Frontend → Vercel  
+  - Backend → Render  
+
+## ⚡ Features  
+- User signup & login  
+- Secure JWT authentication  
+- Send / receive money between users  
+- Transaction history with clear UI  
+- Responsive design  
+
+## 🔧 Setup  
+
+### Backend  
+```bash
+cd backend
+npm install
+npm start
+```
+
+### frontend
+```bash
+cd frontend-funwallet
+npm install
+npm run dev
+
+```
+
+
+
+<br>
+<br>
+<br>
+
+
+
+
+
+
+<br>
+
+---
+
+---
+
+---
+
 # Important concepts - 
 > learned during creating this project - research + GPT.
 
