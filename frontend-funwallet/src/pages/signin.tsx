@@ -5,7 +5,7 @@ import { InputBox } from "../components/Inputbox";
 import { ButtonComponent } from "../components/ButtonComponent";
 import { BottomWarning } from "../components/BottomWarning";
 import { LandingpageSide } from "../components/LandingpageSide";
-import { BACKEND_URL } from "../pages/config";
+import { BACKEND_URL } from "./config";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 import toast from "react-hot-toast";

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react"
 import { BACKEND_URL } from "../pages/config"
 import axios from "axios"
-import { useNavigate } from "react-router-dom"
+//import { useNavigate } from "react-router-dom"
 import { ButtonComponent } from "./ButtonComponent"
 import { SendMoneyModal } from "./SendMoneyModal"
 

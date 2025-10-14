@@ -7,7 +7,7 @@ import { LandingpageSide } from "../components/LandingpageSide";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import axios from "axios";
-import { BACKEND_URL } from "../pages/config";
+import { BACKEND_URL } from "./config";
 import { useNavigate } from "react-router-dom";
 
 
