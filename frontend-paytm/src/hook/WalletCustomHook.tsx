@@ -5,18 +5,28 @@ import axios from "axios"
 import toast from "react-hot-toast"
 import { BACKEND_URL } from "../pages/config"
 
-// ----------* Context Type since interface because mainly used for obj or func type------------------
+
+
+// ----------* Context Type using--> interface because mainly used for obj or func type------------------
 interface WalletContextType {
   balance: string
   loading: boolean
   visible: boolean
   checkBalLabel: string
-  fetchBalance: () => Promise<void>
+  // fetchBalance: () => Promise<void>
+  fetchBalance: (options?: { silent?: boolean }) => Promise<void>
   toggleBalance: () => Promise<void>
   showBalance: () => void
   addMoney: (amount: number) => Promise<void>
   sendMoney: (receiverId: string, amount: number) => Promise<void>
+  transactions: any[]
+  historyError: string | null
+  // fetchTransactionHistory: () => Promise<void>
+  fetchTransactionHistory: (options?: { silent?: boolean}) => Promise<void>
 }
+
+
+
 
 // ------------------ Create Context ------------------
 export const WalletContext = createContext<WalletContextType | undefined>(undefined)
@@ -27,10 +37,16 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   const [loading, setLoading] = useState(false)
   const [visible, setVisible] = useState(false)
   const [checkBalLabel, setCheckBalLabel] = useState("Check balance")
+  const [transactions, setTransactions] = useState<any[]>([])
+ const [historyError, setHistoryError] = useState<string | null>(null)
+
+
 
   // -------------## Fetch Balance from backend ------------------
-  const fetchBalance = async () => {
-    setLoading(true)
+  const fetchBalance = async ( {silent=false}={}) => {
+   
+    if (!silent) setLoading(true)  //loading visibleon when manually checking or calling balance
+   
     try {
       const token = localStorage.getItem("token")
       const res = await axios.get(`${BACKEND_URL}/api/v1/account/balance`, {
@@ -42,6 +58,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       }).format(res.data.balance)
       setBalance(formatted)
     } catch (error) {
+      if (!silent) {
       if (axios.isAxiosError(error) && error.response) {
         const { status, data } = error.response
         if (status === 403 && data === "Error in getting the balance. Try after sometime") {
@@ -50,10 +67,14 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       } else {
         toast.error("Server not reachable or unexpected error!")
       }
-    } finally {
-      setLoading(false)
     }
+    }  finally {
+        if (!silent) setLoading(false)
+      }
   }
+
+
+
 
   // --------------## visible or invisible balance ------------------
   const toggleBalance = async () => {
@@ -68,10 +89,19 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+
+
+
+
   const showBalance = () => {
     setVisible(true)
     setCheckBalLabel("Hide balance")
   }
+
+
+
+
+
 
   // --------------## Add Money to own wallet by typing just amount ------------------
   const addMoney = async (amount: number) => {
@@ -86,6 +116,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
       })
       toast.success("Balance updated successfully.")
       await fetchBalance()
+      await fetchTransactionHistory()
       showBalance()     //bal update hone ke baad dikha bhi dena hai
 
     } catch (error) {
@@ -104,6 +135,9 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+
+
+
   // ---------------## Sending money to other from the list. ------------------
   const sendMoney = async (receiverId: string, amount: number) => {
     if (amount <= 0) {
@@ -116,14 +150,16 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
         headers: { authorization: `${token}` },
       })
       await fetchBalance()   //after updating fetch updated balance
+      await fetchTransactionHistory()
       toast.success(res.data.message)
       showBalance()
+      
 
     } catch (error) {
       if (axios.isAxiosError(error) && error.response) {
         const { status, data } = error.response
         if (status === 403 && data.message === "Insufficient balance") {
-          toast.error("Insufficient balance")
+          toast.error("Insufficient balance...")
         } else if (status === 404 && data.message === "Receiver not found") {
           toast.error("Receiver not found")
         } else {
@@ -135,9 +171,60 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
     }
   }
 
+
+
+
+
+  //--------------## for fetching the transaction history of each user -----------
+const fetchTransactionHistory = async ({silent = false } = { }) => {
+
+  try {
+
+    if (!silent) {
+      setHistoryError(null) // clear error only when user manually calling this.
+    }
+
+    const token = localStorage.getItem("token")
+    const res = await axios.get(`${BACKEND_URL}/api/v1/account/gethistory`, {
+      headers: { authorization: `${token}` },
+    })
+
+    const transactionFetched = res.data.transactions
+    if (Array.isArray(transactionFetched)) {
+
+      setTransactions(transactionFetched)       //set all transactions after fetching.
+      if (!silent) {
+        setHistoryError(transactionFetched.length === 0 ? "No transaction history available." : null)
+      }
+      
+     // return res.data.transactions //for update received paymentrealtime.-- testing something.
+
+    } else {      //transaction sahi formate-[] me return nahi ho raha hai.
+      throw new Error("Invalid response format")
+    }
+
+  } catch (error) {
+    if (!silent) {   //on silet:false -- then any error came.
+      setTransactions([])
+      setHistoryError("Failed to fetch transaction history. Try again.")
+    }
+  }
+}
+
+
+
+
+
+
+
   return (
     <WalletContext.Provider
       value={{
+
+        fetchTransactionHistory,
+        transactions,
+        historyError,
+
         balance,
         loading,
         visible,
@@ -155,7 +242,7 @@ export const WalletProvider = ({ children }: { children: ReactNode }) => {
   )
 }
 
-// ---#####  Custom Hook - easy to consume context in components anywhere ------------------
+// ---#####$$  Custom Hook - easy to consume context in components anywhere ------------------
 export const useWalletContext = () => {
   const context = useContext(WalletContext)
   if (!context) {

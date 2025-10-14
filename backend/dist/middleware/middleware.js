@@ -8,7 +8,7 @@ const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = require("../config");
 const UserMiddleware = (req, res, next) => {
     const header = req.headers.authorization;
-    console.log("header-----------------" + header);
+    //console.log("header-----------------"+header)
     //if(!header || !header.startsWith('Bearer')){
     if (!header) {
         return res.status(403).json({

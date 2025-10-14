@@ -36,7 +36,7 @@ export const Users = ()=>{
     },[filter])
 
     return <>
-        <div className="font-bold flex justify-start items-center text-2xl">
+    <div className="font-bold flex justify-start items-center text-2xl">
             Search users
         </div>
 
@@ -45,21 +45,49 @@ export const Users = ()=>{
                 setFilter(e.target.value)
             }} type="text" placeholder="Search users..." className="w-full px-2 py-2 border rounded border-slate-200"></input>
         </div>
-
-        <div className="max-h-lvh flex-1 overflow-y-auto pr-1 md:pr-2">
-            {users.map(Each =>(<UserDisplay 
-            key={Each._id}
-            user={Each}
-//######NOTE-- like on sending the props - setselecteduser-means send money to this user + and
-//  each user can start show modal.  here oneSend - is a function jo sabhi user ke pass hai aur trugger hoga 
-//  jab individual user pe send money button click karenge aur sath me showmodal bhi open hoga.
-            onSend={() => {
+    
+    {/* <div 
+    className={`
+        flex-1 pr-2 md:pr-2 
+        ${users.length > 5 ? "overflow-y-auto" : ""} 
+        max-h-[calc(100vh-250px)] md:max-h-[calc(100vh-220px)] lg:max-h-[calc(100vh-200px)]
+    `}
+    >
+    {users.map(Each => (
+        <UserDisplay 
+        key={Each._id}
+        user={Each}
+        onSend={() => {
             setSelectedUser({ id: Each._id, name: Each.firstname });
             setShowSendMoneyModal(true);
-            }}
-            
-            />))}
-        </div>
+        }}
+        />
+    ))}
+    </div> */}
+
+<div 
+  className={`
+    flex-1 pr-2 md:pr-2 
+    ${users.length > 5 ? "overflow-y-auto" : ""} 
+    max-h-[calc(100vh-60px)] md:max-h-[calc(100vh-40px)] lg:max-h-[calc(100vh-30px)]
+  `}
+>
+  {users.map(Each => (
+    <UserDisplay 
+      key={Each._id}
+      user={Each}
+      onSend={() => {
+        setSelectedUser({ id: Each._id, name: Each.firstname });
+        setShowSendMoneyModal(true);
+      }}
+    />
+  ))}
+</div>
+
+
+
+
+
 
             <SendMoneyModal
             show={showSendMoneyModal}

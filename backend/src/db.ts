@@ -1,6 +1,8 @@
 
-import mongoose, { Schema } from "mongoose";
+import mongoose, { model, Schema } from "mongoose";
 import { MONGODB_URL } from "./config";
+
+
 
 //---------------------    db connection    ----------------------
 export async function ConnectDB() {
@@ -42,3 +44,21 @@ const accountSchema=new mongoose.Schema({
     balance:{ type:Number, required:true }
 })
 export const accountModel = mongoose.model('account', accountSchema)
+
+
+
+
+
+//--------------- Schema for the transaction ----------------
+const TransactionHistory = new mongoose.Schema({
+    userId:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'user',
+        required:true,
+    },
+    amount:{type:Number, required:true},
+    PaymentType:{type:String, enum: ["add", "receive", "send"], required:true },
+    timestamp: { type: Date, default: Date.now }
+})
+export const TransactionHistoryModel = mongoose.model('transaction', TransactionHistory)
+

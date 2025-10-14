@@ -90,3 +90,65 @@ const { sendMoney } = useWallet()
 > But they don’t share the same balance state
 
 > So when you call sendMoney() inside SendMoneyModal, it updates its own copy of balance — not the one shown in BalanceShow
+
+
+<br>
+
+----
+
+>### why .session(session) during transaction in each query??
+
+* Without .session(session):
+
+* MongoDB treats those operations as outside the transaction
+
+* If one fails, others won’t rollback
+
+* You lose atomicity and risk partial updates, which is dangerous for money transfers
+
+
+---
+
+<br>
+<br>
+<br>
+
+
+## Silent Mode, Auto Updates & Why We Need Them
+> ### Problem - 
+* When user sends or add balance the it automatically updated in balance and transaction history because we calling fetchBalance() + fetchTransactionHistory() after api success.
+
+* But on the receiver side there is no fuction call here it need to refresh whole to see the updated value in the transaction history or balance.
+
+<br>
+
+> solution -
+> <br>
+> 1. WebSocket: real-time push (ideal, complex).
+> 2. Polling (using in this): periodic fetch like every 30s
+
+<br>
+<br>
+<br>
+
+
+> ### why silent mode?
+
+In the fetchBalance & fetchTransactionHistory function-
+
+1. If silent:true - 
+* Skip clearing errors.
+* Skip showing loaders.
+* Just update state quietly.
+
+2. if silent:false (by default fixed) -
+* When user triggers an action (send/add money).
+* Show loaders and errors normally.
+
+<br>
+
+### simple summary - 
+* silent = false (default) → show loader + toast errors (good for user actions or page load).
+
+* silent = true → skip loader & skip toasts (good for background auto-refresh).
+

@@ -66,3 +66,42 @@ export declare const accountModel: mongoose.Model<{
 } & {
     __v: number;
 }>>;
+export declare const TransactionHistoryModel: mongoose.Model<{
+    userId: mongoose.Types.ObjectId;
+    amount: number;
+    PaymentType: "add" | "receive" | "send";
+    timestamp: NativeDate;
+}, {}, {}, {}, mongoose.Document<unknown, {}, {
+    userId: mongoose.Types.ObjectId;
+    amount: number;
+    PaymentType: "add" | "receive" | "send";
+    timestamp: NativeDate;
+}, {}, mongoose.DefaultSchemaOptions> & {
+    userId: mongoose.Types.ObjectId;
+    amount: number;
+    PaymentType: "add" | "receive" | "send";
+    timestamp: NativeDate;
+} & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}, mongoose.Schema<any, mongoose.Model<any, any, any, any, any, any>, {}, {}, {}, {}, mongoose.DefaultSchemaOptions, {
+    userId: mongoose.Types.ObjectId;
+    amount: number;
+    PaymentType: "add" | "receive" | "send";
+    timestamp: NativeDate;
+}, mongoose.Document<unknown, {}, mongoose.FlatRecord<{
+    userId: mongoose.Types.ObjectId;
+    amount: number;
+    PaymentType: "add" | "receive" | "send";
+    timestamp: NativeDate;
+}>, {}, mongoose.ResolveSchemaOptions<mongoose.DefaultSchemaOptions>> & mongoose.FlatRecord<{
+    userId: mongoose.Types.ObjectId;
+    amount: number;
+    PaymentType: "add" | "receive" | "send";
+    timestamp: NativeDate;
+}> & {
+    _id: mongoose.Types.ObjectId;
+} & {
+    __v: number;
+}>>;

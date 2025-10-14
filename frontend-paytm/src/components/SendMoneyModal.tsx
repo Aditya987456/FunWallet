@@ -56,7 +56,9 @@ export const SendMoneyModal = ({ show, onClose, receiver }: SendMoneyModalProps)
           <input
   type="number"
   value={amount}
-  onChange={(e:any) => setAmount(e.target.value)}
+  // onChange={(e:any) => setAmount(e.target.value)} //
+  onChange={(e) => setAmount(Number(e.target.value))}
+
   placeholder="Enter amount"
   className="mt-1 w-full rounded-md border border-gray-300 px-3 py-2 text-sm"
 />
