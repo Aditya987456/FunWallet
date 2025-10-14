@@ -48,7 +48,7 @@ export const Dashboard = () => {
   </span>
   <span>·</span>
   <a 
-    href="https://www.linkedin.com/in/aditya-raj-006978250/" 
+    href="https://www.linkedin.com/in/adityaraj2981/" 
     target="_blank" 
     rel="noopener noreferrer"
     className="flex items-center gap-1 text-blue-600 hover:text-blue-800 transition-colors"
