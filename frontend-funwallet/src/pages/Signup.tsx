@@ -123,7 +123,9 @@ export function Signup() {
           <InputBox 
             onChange={
             (e:any)=>{ setPassword(e.target.value)}}
-            placeholder="123456" label={"Password"} />
+            placeholder="123456"
+            type="password"
+             label={"Password"} />
 
           <div className="pt-4">
             <ButtonComponent

@@ -112,11 +112,15 @@ export function Signin() {
 
           <InputBox
            onChange={(e:any)=>{setEmail(e.target.value)}}
-           placeholder="adityarajxdev@gmail.com" label={"Email"} />
+           placeholder="adityarajxdev@gmail.com"
+          //  type="text"  //--- here even if i not pass type then bydefault it takes text because of input component that we define.
+            label={"Email"} />
 
           <InputBox
            onChange={(e:any)=>{setPassword(e.target.value)}}
-           placeholder="123456" label={"Password"} />
+           placeholder="123456"
+            label={"Password"} 
+           type="password"/>
 
           <div className="pt-4">
             <ButtonComponent
