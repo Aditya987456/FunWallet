@@ -22,6 +22,15 @@ export function Signin() {
   const [ loader, setLoader ]=useState(false)   //for showing loading after during signing in.
 
 
+//#### because we are accessing it in the finally block as well for clearing the timeout so for that we can't define it in the try block only.
+  let stage1: ReturnType<typeof setTimeout>;
+  let stage2: ReturnType<typeof setTimeout>;
+  let stage3: ReturnType<typeof setTimeout>;
+  let stage4: ReturnType<typeof setTimeout>;
+  let stage_5_withRetry: ReturnType<typeof setTimeout>;
+
+
+
   async function  SigningIn() {
     try {
       setLoader(true)
@@ -42,19 +51,44 @@ export function Signin() {
     const normalizedPassword = password.trim();           //  trim spaces
 
     if (!normalizedEmail || !normalizedPassword) {
-      toast.error('All fields required !');
+      toast.error('All fields required !', {id: 'signin'});
       return;
     }
+
+  toast.loading("Signing in...", { id: "signin" });
+
+  stage1 = setTimeout(() => {
+      toast.loading("Starting server, please wait...", { id: "signin" });
+    }, 15000);
+
+  stage2 = setTimeout(() => {
+      toast.loading("Connecting to backend...", { id: "signin" });
+    }, 30000);
+
+  stage3 = setTimeout(() => {
+      toast.loading("Loading your wallet...", { id: "signin" });
+    }, 45000);
+
+  stage4 = setTimeout(() => {
+      toast.loading("Final step in progress...", { id: "signin" });
+    }, 60000);
+
+  stage_5_withRetry = setTimeout(() => {
+    toast.error("Still waiting? 🔁 Try refreshing.", {
+      id: "signin",
+      //---------???? refresh button also will add this later.
+      // action: {      
+      //   label: "🔄 Refresh",
+      //   onClick: () => window.location.reload(),
+      // },
+    });
+  }, 75000);
+
 
     const response = await axios.post(`${BACKEND_URL}/api/v1/user/signin`, {
       email: normalizedEmail,
       password: normalizedPassword,
     });
-
-
-
-
-
 
       const token = response.data.token
       const firstname = response.data.firstname
@@ -63,7 +97,7 @@ export function Signin() {
       localStorage.setItem('firstname', firstname)
 
 
-      toast.success('successfully signed up')
+      toast.success('successfully signed up', { id:'signin'})
       navigate('/dashboard')
 
     } catch (error) {
@@ -78,21 +112,26 @@ export function Signin() {
       const { status, data } = error.response;
 
       if(status === 403 && data.message ==="Invalid emailId."){
-        toast.error('Invalid emailId')
+        toast.error('Invalid emailId', { id: "signin" })
       }
       else if (status === 403 && data.message === "Incorrect password. Try again"){
-        toast.error('Invalid password. Try again')
+        toast.error('Invalid password. Try again', { id: "signin" })
       }
       else {
-        toast.error(data.message || "Something went wrong.")
+        toast.error(data.message || "Something went wrong.", { id: "signin" })
       }
      }else{
        //for the network error - like fallback.
-      toast.error("Server not reachable or unexpected error!");
+      toast.error("Server not reachable or unexpected error!", { id: "signin" });
      }
     }finally{
       setLoader(false)
-    }
+      clearTimeout(stage1);
+      clearTimeout(stage2);
+      clearTimeout(stage3);
+      clearTimeout(stage4);
+      clearTimeout(stage_5_withRetry);
+        }
   }
 
 

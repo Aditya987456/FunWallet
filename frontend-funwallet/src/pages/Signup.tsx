@@ -22,6 +22,13 @@ export function Signup() {
   const [password, setPassword]=useState('')
   const [ loader, setLoader]=useState(false)
 
+//#### because we are accessing it in the finally block as well for clearing the timeout so for that we can't define it in the try block only.
+  let stage1: ReturnType<typeof setTimeout>;
+  let stage2: ReturnType<typeof setTimeout>;
+  let stage3: ReturnType<typeof setTimeout>;
+  let stage4: ReturnType<typeof setTimeout>;
+  let stage_5_withRetry: ReturnType<typeof setTimeout>;
+
 
   async function  SigningUp() {
     setLoader(true)
@@ -47,9 +54,42 @@ export function Signup() {
       const normalizedPassword = password.trim();          // password trimmed
 
       if (!normalizedFirstname || !normalizedLastname || !normalizedEmail || !normalizedPassword) {
-        toast.error('All fields required !');
+        toast.error('All fields required !',{id:'signup'});
         return;
       }
+
+
+
+      toast.loading("Creating your account...", { id: "signup" });
+
+      stage1=setTimeout(() => {
+        toast.loading("Starting server, please wait...", { id: "signup" });
+      }, 10000);
+
+      stage2=setTimeout(() => {
+        toast.loading("Connecting to backend...", { id: "signup" });
+      }, 30000);
+
+      stage3=setTimeout(() => {
+        toast.loading("Setting up your wallet...", { id: "signup" });
+      }, 45000);
+
+      stage4=setTimeout(() => {
+        toast.loading("Final step in progress...", { id: "signup" });
+      }, 60000);
+
+      stage_5_withRetry=setTimeout(() => {
+        toast.error("Still waiting? 🔁 Try refreshing.", {
+          id: "signup",
+          // action: {
+          //   label: "🔄 Refresh",
+          //   onClick: () => window.location.reload(),
+          // },
+        });
+      }, 75000);
+
+
+
 
       const response = await axios.post(`${BACKEND_URL}/api/v1/user/signup`, {
         firstname: normalizedFirstname,
@@ -59,7 +99,7 @@ export function Signup() {
       });
 
 
-      toast.success(response.data.message || 'Successfully signed up!');
+      toast.success(response.data.message || 'Successfully signed up!', { id: "signup" });
       navigate('/signin');
 
     } catch (error) {
@@ -73,23 +113,29 @@ export function Signup() {
       const { status, data } = error.response;
 
       if (status === 403 && data.message === "User already exist.") {
-        toast.error("User already exists! Try signing in.");
+        toast.error("User already exists! Try signing in.", { id: "signup" });
       } 
       else if (status === 411 && data.message === "Incorrect input formate.") {
-        toast.error("Invalid input format.");
+        toast.error("Invalid input format.", { id: "signup" });
       } 
       else if (status === 409 && data.error === "Username already exists") {
-        toast.error("Username already exists!");
+        toast.error("Username already exists!", { id: "signup" });
       } 
       else {
-        toast.error(data.message || "Something went wrong.");
+        toast.error(data.message || "Something went wrong.", { id: "signup" });
       }
     } else {
       //for the network error - like fallback.
-      toast.error("Server not reachable or unexpected error!");
+      toast.error("Server not reachable or unexpected error!", { id: "signup" });
     }
     }finally{
       setLoader(false)
+      clearTimeout(stage1);
+      clearTimeout(stage2);
+      clearTimeout(stage3);
+      clearTimeout(stage4);
+      clearTimeout(stage_5_withRetry);
+
     }
   }
 
